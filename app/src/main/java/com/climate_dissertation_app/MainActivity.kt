@@ -23,6 +23,8 @@ import android.Manifest;
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 
@@ -32,29 +34,25 @@ import java.lang.RuntimeException
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var etCity: EditText
-    lateinit var etCountry: EditText
-    lateinit var tvResult: TextView
-    lateinit var locationProvider: FusedLocationProviderClient
-
-    private val url = "http://api.openweathermap.org/data/2.5/weather";
-    private val idApi = "434420eed5d609b9b0cc1258b9ee5b5a";
-    private val decimalFormat = DecimalFormat("#.##");
+   private lateinit var locationProvider: FusedLocationProviderClient
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //etCity = findViewById(R.id.etCity)
-        //etCountry = findViewById(R.id.etCountry)
         locationProvider = LocationServices.getFusedLocationProviderClient(this)
-        requestLocationPermission()
+        verifyLocationPermission()
         fetchLocation()
         supportActionBar?.hide()
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(this@MainActivity, Home::class.java)
+            startActivity(intent)
+            finish()
+        }, 1500)
+
     }
 
     private fun fetchLocation() {
-        // Check if the Camera permission has been granted
         if (ActivityCompat.checkSelfPermission(
                 applicationContext,
                 permission.ACCESS_FINE_LOCATION
@@ -76,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun requestLocationPermission(): Boolean {
+    private fun verifyLocationPermission(): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 permission.ACCESS_FINE_LOCATION
@@ -98,27 +96,4 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
-
-    fun getClimateCharacteristics(view: android.view.View) {
-        var tempURL = "";
-        val city = etCity.text.toString().trim()
-        val country = etCountry.text.toString().trim()
-
-        if (city.isEmpty()) {
-            tvResult.text = "City can not be empty";
-        } else {
-            tempURL = if (country != "") {
-                "$url?q=$city,$country&idApi=$idApi";
-            } else {
-                "$url?q=$city&idApi$idApi";
-            }
-            val stringrequest = StringRequest(Request.Method.POST, tempURL,
-                {
-                    @Override
-                    fun onResponse(response: String) {
-                    }
-                }, {
-                })
-        }
-    }
 }
