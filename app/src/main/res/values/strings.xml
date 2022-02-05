@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">climate_dissertation_app</string>
+    <string name="pending_location">Finding your weather data...</string>
 </resources>
