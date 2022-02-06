@@ -6,30 +6,8 @@
     android:layout_height="wrap_content"
     tools:context=".ui.HomeActivity">
 
-    <!--    <Button-->
-    <!--        android:id="@+id/requestButton"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="Request permission"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--        app:layout_constraintRight_toRightOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"/>-->
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/home_main"
-        android:layout_width="409dp"
-        android:layout_height="601dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/weatherIconImageView"
         android:layout_width="169dp"
         android:layout_height="112dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,20 +16,11 @@
         app:srcCompat="@drawable/homephoto" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <TextView
         android:id="@+id/mainScreenTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/pending_location"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/weatherIconImageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

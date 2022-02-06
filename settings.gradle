@@ -3,9 +3,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
     }
 }
 rootProject.name = "climate_dissertation_app"
 include ':app'
-include ':LoginVerification'

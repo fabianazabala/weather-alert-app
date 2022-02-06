@@ -36,7 +36,9 @@ data class Weather(
     val id: Long,
     val main: String,
     val description: String,
-    val icon: String
+    val icon: String,
+    @JsonIgnore
+    val iconPicture: String? = null
 )
 
 data class WeatherData(
@@ -48,10 +50,10 @@ data class WeatherData(
     val minimumTemperature: Double,
     @JsonProperty("temp_max")
     val maximumTemperature: Double,
-    @JsonIgnore
-    val temperatureSymbol: String = "°K",
     val pressure: Int,
-    val humidity: Int
+    val humidity: Int,
+    @JsonIgnore
+    val temperatureSymbol: String = "°K"
 ) {
     fun currentTemperature() = "$temperature $temperatureSymbol"
 }
