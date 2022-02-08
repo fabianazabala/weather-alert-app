@@ -9,12 +9,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import com.climate_dissertation_app.R
+import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     lateinit var toggle: ActionBarDrawerToggle
 
@@ -23,6 +24,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        configureNavigationDrawer()
+        weatherFragment()
+    }
+
+    private fun configureNavigationDrawer() {
         toggle = ActionBarDrawerToggle(
             this,
             drawer_layout,
@@ -35,7 +41,6 @@ class MainActivity : AppCompatActivity() {
         )
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
-        toHomeActivity()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -55,12 +60,22 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun toHomeActivity() {
-//        supportActionBar?.hide()
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            val intent = Intent(this@MainActivity, HomeActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        }, 1500)
+    override fun onNavigationItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.weather_item -> weatherFragment()
+        R.id.settings_item -> settingsFragment()
+        else -> {
+            throw NotImplementedError("Yo dude implement me pls")
+        }
+    }
+
+    private fun settingsFragment(): Boolean {
+        return true
+    }
+
+    private fun weatherFragment(): Boolean {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(fragment_placeholder.id, CurrentRecommendationFragment())
+        transaction.commit()
+        return true
     }
 }
