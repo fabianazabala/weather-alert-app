@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/weather_item"
+            android:icon="@drawable/ic_weather_sunny"
+            android:title="@string/current_weather" />
+        <item
+            android:id="@+id/clothes_item"
+            android:icon="@drawable/ic_tshirt"
+            android:title="@string/clothes_selection" />
+        <item
+            android:id="@+id/settings_item"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/settings" />
+    </group>
+</menu>

@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">climate_dissertation_app</string>
-    <string name="pending_location">Finding your weather data...</string>
+    <string name="pending_location">Finding your weather data…</string>
+    <string name="current_weather">Current Weather</string>
+    <string name="clothes_selection">Clothes Selection</string>
+    <string name="settings">Settings</string>
+    <string name="open_drawer">Open Drawer</string>
+    <string name="close_drawer">Close Drawer</string>
 </resources>
