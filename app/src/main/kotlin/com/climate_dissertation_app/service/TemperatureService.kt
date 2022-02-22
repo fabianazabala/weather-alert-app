@@ -10,10 +10,10 @@ class TemperatureService @Inject constructor() {
     private val kelvinConstant = -273.15
 
     fun convertToCelsius(weatherData: WeatherData) = weatherData.copy(
-        temperature = weatherData.temperature - kelvinConstant,
-        feelsLike = weatherData.feelsLike - kelvinConstant,
-        maximumTemperature = weatherData.maximumTemperature - kelvinConstant,
-        minimumTemperature = weatherData.minimumTemperature - kelvinConstant,
+        temperature = weatherData.temperature + kelvinConstant,
+        feelsLike = weatherData.feelsLike + kelvinConstant,
+        maximumTemperature = weatherData.maximumTemperature + kelvinConstant,
+        minimumTemperature = weatherData.minimumTemperature + kelvinConstant,
         temperatureSymbol = "°C"
     )
 

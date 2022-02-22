@@ -17,15 +17,15 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:textAlignment="center"
-            android:text="@string/title_recommended_clothes" />
+            android:text="@string/title_recommended_clothes"
+            android:textAlignment="center" />
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragmentContainerView"
-            android:name="com.climate_dissertation_app.ui.CurrentClothesFragment"
-            android:layout_marginTop="40dp"
+            android:id="@+id/current_clothes_fragment_container"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp" />
     </FrameLayout>
 
     <FrameLayout
@@ -37,15 +37,15 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:textAlignment="center"
-            android:text="@string/title_current_weather" />
+            android:text="@string/title_current_weather"
+            android:textAlignment="center" />
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragmentContainerView2"
-            android:name="com.climate_dissertation_app.ui.CurrentWeatherFragment"
-            android:layout_marginTop="40dp"
+            android:id="@+id/current_weather_fragment_container"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp" />
     </FrameLayout>
 
 </LinearLayout>

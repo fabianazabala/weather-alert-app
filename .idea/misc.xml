@@ -8,18 +8,21 @@
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/drawable/ic_svgweather.xml" value="0.146875" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/drawable/ic_tshirt.xml" value="0.2423611111111111" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/drawable/ic_weather_conditions_seasonal_female_clothes_girl_weather_conditions_woman_wearing_seasonal_clothes_ve.xml" value="0.146875" />
+        <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/drawable/ic_weather_night_partly_cloudy.xml" value="0.22708333333333333" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/drawable/ic_weather_partly_cloudy.xml" value="0.2423611111111111" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/drawable/search_icon.xml" value="0.2423611111111111" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/drawable/settings_icon.xml" value="0.2423611111111111" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/layout/activity_home.xml" value="0.4466666666666667" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/layout/activity_main.xml" value="0.12755102040816327" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/layout/cloth_item.xml" value="0.26810109289617484" />
+        <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/layout/cloth_item_layout.xml" value="0.26434426229508196" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/layout/content_main_navigation.xml" value="0.1" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/layout/content_navigation_drawer.xml" value="0.1" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/layout/fragment_current_clothes.xml" value="0.26810109289617484" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/layout/fragment_current_recommendation.xml" value="0.15761285386381024" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/layout/fragment_current_weather.xml" value="0.26810109289617484" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/layout/fragment_initial_screen.xml" value="0.22301912568306012" />
+        <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/layout/fragment_loading.xml" value="0.26434426229508196" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/layout/main_drawer_layout.xml" value="0.2718579234972678" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/layout/main_navigation_menu.xml" value="0.2718579234972678" />
         <entry key="..\:/Users/fabiana.zabala/AndroidStudioProjects/climate_dissertation_app/app/src/main/res/layout/toolbar_layout.xml" value="0.26810109289617484" />

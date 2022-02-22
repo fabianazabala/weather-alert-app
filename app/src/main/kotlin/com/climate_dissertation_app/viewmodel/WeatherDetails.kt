@@ -16,6 +16,8 @@ data class WeatherDetails(
     val visibility: Int,
     val wind: Wind,
     val clouds: Cloud,
+    val rain: Rain?,
+    val snow: Snow?,
     val dt: Int,
     val sys: Sys,
     val timezone: Int,
@@ -41,6 +43,7 @@ data class Weather(
     val iconPicture: String? = null
 )
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class WeatherData(
     @JsonProperty("temp")
     val temperature: Double,
@@ -68,10 +71,20 @@ data class Cloud(
     val all: Int,
 )
 
+data class Rain(
+    @JsonProperty("1h")
+    val oneHour: Double
+)
+
+data class Snow(
+    @JsonProperty("1h")
+    val oneHour: Double
+)
+
 data class Sys(
     val type: Int,
     val id: Int,
     val country: String,
-    val sunrise: Int,
-    val sunset: Int,
+    val sunrise: Long,
+    val sunset: Long,
 )

@@ -15,23 +15,16 @@ import kotlinx.android.synthetic.main.fragment_current_clothes.*
 
 class CurrentClothesFragment : Fragment() {
 
+    companion object {
+        const val recommendedClothesKey = "recommendedClothes"
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         clothes_list_view.addItemDecoration(ItemSeparation())
-        clothes_list_view.adapter = ClothesAdapter(
-            listOf(
-                ClothItem(R.drawable.winter_scarf, "Scarf"),
-                ClothItem(R.drawable.winter_scarf, "Scarf"),
-                ClothItem(R.drawable.winter_scarf, "Scarf"),
-                ClothItem(R.drawable.winter_scarf, "Scarf"),
-                ClothItem(R.drawable.winter_scarf, "Scarf"),
-                ClothItem(R.drawable.winter_scarf, "Scarf"),
-                ClothItem(R.drawable.winter_scarf, "Scarf"),
-                ClothItem(R.drawable.winter_scarf, "Scarf"),
-                ClothItem(R.drawable.winter_scarf, "Scarf"),
-                ClothItem(R.drawable.winter_scarf, "Scarf")
-            )
-        )
+        val recommendedClothes =
+            arguments?.getParcelableArrayList<ClothItem>(recommendedClothesKey) ?: emptyList()
+        clothes_list_view.adapter = ClothesAdapter(recommendedClothes)
     }
 
     override fun onCreateView(
