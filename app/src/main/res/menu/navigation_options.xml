@@ -3,7 +3,7 @@
     <group>
         <item
             android:id="@+id/weather_item"
-            android:icon="@drawable/ic_weather_sunny"
+            android:icon="@drawable/ic_weather"
             android:title="@string/current_weather" />
         <item
             android:id="@+id/settings_item"

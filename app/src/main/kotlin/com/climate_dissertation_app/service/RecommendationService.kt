@@ -8,6 +8,7 @@ import java.time.Instant
 import java.time.LocalTime
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.roundToInt
 
 @Singleton
 class RecommendationService @Inject constructor(
@@ -16,22 +17,23 @@ class RecommendationService @Inject constructor(
     private val clock: Clock
 ) {
 
-    fun recommendClothesBasedOnWeather(latitude: Double, longitude: Double): CurrentRecommendation {
+    fun recommendationByLocation(latitude: Double, longitude: Double): CurrentRecommendation {
         val weather = weatherRepository.findWeatherDetails(latitude, longitude)
         var recommendedClothes: List<ClothItem> = emptyList()
-        var recommendedWeatherIcon: Int =
-            if (isNight(weather)) R.drawable.ic_weather_night_partly_cloudy
-            else R.drawable.ic_weather_sunny
+        var recommendedWeatherIcon: Int = defaultWeatherIcon(weather)
 
+        if (isWindyDay(weather.wind)) {
+            recommendedWeatherIcon = R.drawable.windy
+        }
 
         if (isRainyDay(weather.rain)) {
             recommendedClothes = clothesRepository.rainyDay()
-            recommendedWeatherIcon = R.drawable.ic_weather_pouring
+            recommendedWeatherIcon = R.drawable.rain
         }
 
         if (isSnowyDay(weather.snow)) {
             recommendedClothes = clothesRepository.snowyDay()
-            recommendedWeatherIcon = R.drawable.ic_weather_snowy_heavy
+            recommendedWeatherIcon = R.drawable.snow
         }
 
         if (isColdAndWindyDay(weather.weatherData, weather.wind)) {
@@ -40,7 +42,6 @@ class RecommendationService @Inject constructor(
 
         if (isColdDay(weather.weatherData)) {
             recommendedClothes = clothesRepository.coldDay()
-            recommendedWeatherIcon = R.drawable.ic_weather_cloudy
         }
 
         if (isFreshDay(weather.weatherData)) {
@@ -68,10 +69,22 @@ class RecommendationService @Inject constructor(
         )
     }
 
+    private fun defaultWeatherIcon(weather: WeatherDetails) =
+        if (isNight(weather))
+            if (isCloudy(weather.clouds))
+                R.drawable.cloudy_night
+            else
+                R.drawable.night
+        else
+            if (isCloudy(weather.clouds))
+                R.drawable.cloudy_day
+            else
+                R.drawable.sunny
+
     private fun recommendCurrentWeatherText(weatherDetails: WeatherDetails): String =
         StringBuilder()
-            .append("Currently there's ${weatherDetails.weatherData.temperature} ${weatherDetails.weatherData.temperatureSymbol}")
-            .append("in ${weatherDetails.cityName} but it feels like ${weatherDetails.weatherData.feelsLike} ${weatherDetails.weatherData.temperatureSymbol}")
+            .append("Currently there's ${weatherDetails.weatherData.temperature.roundToInt()} ${weatherDetails.weatherData.temperatureSymbol} ")
+            .append("in ${weatherDetails.cityName} but it feels like ${weatherDetails.weatherData.feelsLike.roundToInt()} ${weatherDetails.weatherData.temperatureSymbol}")
             .append(System.lineSeparator())
             .append("Today we're expecting a ${weatherSummaryString(weatherDetails)} day!")
             .toString()
@@ -95,7 +108,7 @@ class RecommendationService @Inject constructor(
 
     private fun isNight(weather: WeatherDetails): Boolean {
         return LocalTime.now(clock).isAfter(
-            Instant.ofEpochMilli(weather.sys.sunset).atZone(clock.zone)
+            Instant.ofEpochSecond(weather.sys.sunset).atZone(clock.zone)
                 .toLocalTime()
         )
     }
@@ -120,5 +133,6 @@ class RecommendationService @Inject constructor(
 
     private fun isSnowyDay(snow: Snow?) = snow != null
 
+    private fun isCloudy(cloud: Cloud) = cloud.all > 30
 
 }

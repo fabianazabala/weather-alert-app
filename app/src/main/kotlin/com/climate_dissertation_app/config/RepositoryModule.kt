@@ -10,11 +10,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import java.time.Clock
 
 @Module(includes = [RepositoryModule.BindsModule::class])
-@InstallIn(value = [ActivityComponent::class, SingletonComponent::class])
+@InstallIn(value = [ActivityComponent::class, FragmentComponent::class, SingletonComponent::class])
 class RepositoryModule {
 
     @Provides
@@ -25,8 +27,11 @@ class RepositoryModule {
         .registerModule(KotlinModule.Builder().build())
         .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false)
 
+    @Provides
+    fun clock(): Clock = Clock.systemDefaultZone()
+
     @Module
-    @InstallIn(value = [ActivityComponent::class, SingletonComponent::class])
+    @InstallIn(value = [ActivityComponent::class, FragmentComponent::class, SingletonComponent::class])
     interface BindsModule {
         @Binds
         fun weatherRepository(weatherRepository: WeatherRestRepository): WeatherRepository

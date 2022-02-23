@@ -10,8 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.climate_dissertation_app.R
+import com.climate_dissertation_app.service.CurrentRecommendation
 import com.climate_dissertation_app.service.RecommendationService
 import com.climate_dissertation_app.viewmodel.ClothItem
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -28,6 +30,17 @@ class CurrentRecommendationFragment : Fragment() {
 
     @Inject
     lateinit var recommendationService: RecommendationService
+
+    @Inject
+    lateinit var objectMapper: ObjectMapper
+
+    @Inject
+    lateinit var currentClothesFragment: CurrentClothesFragment
+
+    @Inject
+    lateinit var currentWeatherFragment: CurrentWeatherFragment
+
+    private var latestRecommendation: CurrentRecommendation? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,12 +75,12 @@ class CurrentRecommendationFragment : Fragment() {
     private fun prepareInnerFragments(context: Context) {
         LocationServices.getFusedLocationProviderClient(context)
             .lastLocation.addOnSuccessListener { location ->
-                location?.let { recommendedClothesScreen(it) }
+                location?.let { fetchNewRecommendation(it) }
             }
 
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
-                locationResult?.lastLocation?.let { recommendedClothesScreen(it) }
+                locationResult?.lastLocation?.let { fetchNewRecommendation(it) }
             }
         }
 
@@ -80,36 +93,53 @@ class CurrentRecommendationFragment : Fragment() {
         )
     }
 
-    private fun recommendedClothesScreen(location: Location) {
+    private fun fetchNewRecommendation(location: Location) {
         runBlocking {
             val task = async(Dispatchers.IO) {
-                recommendationService.recommendClothesBasedOnWeather(
+                recommendationService.recommendationByLocation(
                     location.latitude,
                     location.longitude
                 )
             }
-            val recommendedClothes = task.await()
-            currentClothesFragment(recommendedClothes.recommendedClothes)
+            updateFragments(task.await())
         }
     }
 
-    private fun currentClothesFragment(recommendedClothes: List<ClothItem>): Boolean {
+    private fun updateFragments(currentRecommendation: CurrentRecommendation): Boolean {
         val transaction = parentFragmentManager.beginTransaction()
-        val fragment = CurrentClothesFragment()
-
-        fragment.arguments = Bundle().also {
-            it.putParcelableArrayList(
-                CurrentClothesFragment.recommendedClothesKey,
-                ArrayList(recommendedClothes)
-            )
-        }
 
         transaction.replace(
             current_clothes_fragment_container.id,
-            fragment
+            recommendedClothesFragment(currentRecommendation.recommendedClothes)
+        )
+
+        transaction.replace(
+            current_weather_fragment_container.id,
+            recommendedWeatherFragment(currentRecommendation)
         )
         transaction.commitAllowingStateLoss()
         return true
     }
 
+    private fun recommendedClothesFragment(recommendedClothes: List<ClothItem>) =
+        currentClothesFragment
+            .apply {
+                arguments = Bundle().also {
+                    it.putParcelableArrayList(
+                        recommendedClothesKey,
+                        ArrayList(recommendedClothes)
+                    )
+                }
+            }
+
+    private fun recommendedWeatherFragment(currentRecommendation: CurrentRecommendation) =
+        currentWeatherFragment
+            .apply {
+                arguments = Bundle().also {
+                    it.putString(
+                        currentRecommendationKey,
+                        objectMapper.writeValueAsString(currentRecommendation)
+                    )
+                }
+            }
 }

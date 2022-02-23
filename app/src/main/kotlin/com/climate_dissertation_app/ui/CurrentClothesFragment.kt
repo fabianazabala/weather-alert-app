@@ -10,14 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.climate_dissertation_app.R
 import com.climate_dissertation_app.viewmodel.ClothItem
 import com.climate_dissertation_app.viewmodel.ClothesAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_current_clothes.*
+import javax.inject.Inject
+
+const val recommendedClothesKey = "recommendedClothes"
 
 
-class CurrentClothesFragment : Fragment() {
-
-    companion object {
-        const val recommendedClothesKey = "recommendedClothes"
-    }
+@AndroidEntryPoint
+class CurrentClothesFragment @Inject constructor() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
