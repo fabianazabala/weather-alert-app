@@ -1,4 +1,4 @@
-package com.climate_dissertation_app.ui
+package com.climate_dissertation_app.ui.mainscreen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -40,9 +40,7 @@ class CurrentWeatherFragment @Inject constructor() : Fragment() {
 
     private fun updateRecommendedWeatherIcon() = recommended_weather_icon.also { icon ->
         currentRecommendation?.weatherIconResourceId?.let { iconId ->
-            val picasso = Picasso.get()
-            picasso.isLoggingEnabled = true
-            picasso
+            Picasso.get()
                 .load(iconId)
                 .into(icon)
         }

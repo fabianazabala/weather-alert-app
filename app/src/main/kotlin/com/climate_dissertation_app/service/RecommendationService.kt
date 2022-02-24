@@ -1,20 +1,33 @@
 package com.climate_dissertation_app.service
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.location.Location
 import com.climate_dissertation_app.R
 import com.climate_dissertation_app.repository.ClothesRepository
 import com.climate_dissertation_app.viewmodel.*
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import java.time.Clock
 import java.time.Instant
 import java.time.LocalTime
+import java.util.function.Consumer
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.roundToInt
 
+const val LATEST_RECOMMENDATION_KEY = "latest_recommendation"
+
+@SuppressLint("MissingPermission")
 @Singleton
 class RecommendationService @Inject constructor(
     private val weatherRepository: WeatherRepository,
     private val clothesRepository: ClothesRepository,
-    private val clock: Clock
+    private val clock: Clock,
+    private val objectMapper: ObjectMapper
 ) {
 
     fun recommendationByLocation(latitude: Double, longitude: Double): CurrentRecommendation {
@@ -60,13 +73,67 @@ class RecommendationService @Inject constructor(
             recommendedClothes = clothesRepository.beachDay()
         }
 
+        val sortedClothes = recommendedClothes.sortedBy { it.clothPosition }
         return CurrentRecommendation(
-            recommendedClothes.sortedBy { it.clothPosition },
+            sortedClothes,
             weather,
             recommendedWeatherIcon,
             recommendCurrentWeatherText(weather),
-            recommendGreetingsText(weather)
+            recommendGreetingsText(weather),
+            buildNotificationText(weather, sortedClothes)
         )
+    }
+
+    fun refreshRecommendation(context: Context, callback: Consumer<CurrentRecommendation>) {
+        LocationServices.getFusedLocationProviderClient(context)
+            .lastLocation.addOnSuccessListener { location ->
+                location?.let { fetchNewRecommendation(it, context, callback) }
+            }
+    }
+
+    fun latestRecommendation(context: Context): CurrentRecommendation? {
+        val sharedPref =
+            context.getSharedPreferences(LATEST_RECOMMENDATION_KEY, Context.MODE_PRIVATE)
+        return sharedPref.getString(LATEST_RECOMMENDATION_KEY, null)
+            ?.let { objectMapper.readValue(it, CurrentRecommendation::class.java) }
+    }
+
+    private fun fetchNewRecommendation(
+        location: Location,
+        context: Context,
+        callback: Consumer<CurrentRecommendation>
+    ) {
+        runBlocking {
+            val task = async(Dispatchers.IO) {
+                recommendationByLocation(
+                    location.latitude,
+                    location.longitude
+                )
+            }
+            val currentRecommendation = task.await()
+
+            val sharedPref =
+                context.getSharedPreferences(LATEST_RECOMMENDATION_KEY, Context.MODE_PRIVATE)
+            sharedPref?.also {
+                with(it.edit()) {
+                    putString(
+                        LATEST_RECOMMENDATION_KEY,
+                        objectMapper.writeValueAsString(currentRecommendation)
+                    )
+                    apply()
+                }
+            }
+
+            callback.accept(currentRecommendation)
+        }
+    }
+
+    private fun buildNotificationText(
+        weather: WeatherDetails,
+        recommendedClothes: List<ClothItem>
+    ): String {
+        return "Today is a ${weatherSummaryString(weather)} day! For today it's recommended you wear: " +
+                recommendedClothes.joinToString { it.name }
     }
 
     private fun defaultWeatherIcon(weather: WeatherDetails) =

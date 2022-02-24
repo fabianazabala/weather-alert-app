@@ -1,10 +1,7 @@
-package com.climate_dissertation_app.ui
+package com.climate_dissertation_app.ui.mainscreen
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.location.Location
 import android.os.Bundle
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,16 +11,9 @@ import com.climate_dissertation_app.service.CurrentRecommendation
 import com.climate_dissertation_app.service.RecommendationService
 import com.climate_dissertation_app.viewmodel.ClothItem
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_current_recommendation.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class CurrentRecommendationFragment : Fragment() {
@@ -39,8 +29,6 @@ class CurrentRecommendationFragment : Fragment() {
 
     @Inject
     lateinit var currentWeatherFragment: CurrentWeatherFragment
-
-    private var latestRecommendation: CurrentRecommendation? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,50 +59,24 @@ class CurrentRecommendationFragment : Fragment() {
         prepareInnerFragments(context)
     }
 
-    @SuppressLint("MissingPermission")
     private fun prepareInnerFragments(context: Context) {
-        LocationServices.getFusedLocationProviderClient(context)
-            .lastLocation.addOnSuccessListener { location ->
-                location?.let { fetchNewRecommendation(it) }
+        recommendationService.latestRecommendation(context)
+            ?.let { updateFragments(it) }
+            ?: let {
+                recommendationService.refreshRecommendation(context) { updateFragments(it) }
             }
-
-        val locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                locationResult?.lastLocation?.let { fetchNewRecommendation(it) }
-            }
-        }
-
-        LocationServices.getFusedLocationProviderClient(context).requestLocationUpdates(
-            LocationRequest.create().apply {
-                interval = 30000
-                fastestInterval = 10000
-                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            }, locationCallback, Looper.getMainLooper()
-        )
-    }
-
-    private fun fetchNewRecommendation(location: Location) {
-        runBlocking {
-            val task = async(Dispatchers.IO) {
-                recommendationService.recommendationByLocation(
-                    location.latitude,
-                    location.longitude
-                )
-            }
-            updateFragments(task.await())
-        }
     }
 
     private fun updateFragments(currentRecommendation: CurrentRecommendation): Boolean {
         val transaction = parentFragmentManager.beginTransaction()
 
         transaction.replace(
-            current_clothes_fragment_container.id,
+            R.id.current_clothes_fragment_container,
             recommendedClothesFragment(currentRecommendation.recommendedClothes)
         )
 
         transaction.replace(
-            current_weather_fragment_container.id,
+            R.id.current_weather_fragment_container,
             recommendedWeatherFragment(currentRecommendation)
         )
         transaction.commitAllowingStateLoss()

@@ -1,4 +1,4 @@
-package com.climate_dissertation_app.ui
+package com.climate_dissertation_app.ui.mainscreen
 
 
 import android.Manifest
@@ -14,13 +14,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.climate_dissertation_app.R
 import com.climate_dissertation_app.service.RecommendationService
+import com.climate_dissertation_app.ui.notification.RegularNotificationService
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
+import java.time.Clock
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
@@ -29,6 +32,9 @@ class MainActivity : AppCompatActivity(),
 
     @Inject
     lateinit var recommendationService: RecommendationService
+
+    @Inject
+    lateinit var clock: Clock
 
     private lateinit var locationProvider: FusedLocationProviderClient
     private lateinit var toggle: ActionBarDrawerToggle
@@ -42,6 +48,11 @@ class MainActivity : AppCompatActivity(),
 
         configureNavigationDrawer()
         currentRecommendationFragment()
+        configureRegularNotifications()
+    }
+
+    private fun configureRegularNotifications() {
+        RegularNotificationService.scheduleJob(applicationContext)
     }
 
     private fun configureNavigationDrawer() {

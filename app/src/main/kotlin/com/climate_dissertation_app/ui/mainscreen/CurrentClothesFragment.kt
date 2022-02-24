@@ -1,4 +1,4 @@
-package com.climate_dissertation_app.ui
+package com.climate_dissertation_app.ui.mainscreen
 
 import android.graphics.Rect
 import android.os.Bundle

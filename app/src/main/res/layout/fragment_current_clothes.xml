@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.CurrentClothesFragment">
+    tools:context=".ui.mainscreen.CurrentClothesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/clothes_list_view"

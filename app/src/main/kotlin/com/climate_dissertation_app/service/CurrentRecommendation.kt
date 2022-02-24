@@ -9,5 +9,6 @@ data class CurrentRecommendation(
     val weatherDetails: WeatherDetails,
     @DrawableRes val weatherIconResourceId: Int,
     val recommendedWeatherText: String,
-    val recommendedGreetingsText: String
+    val recommendedGreetingsText: String,
+    val notificationText: String
 )

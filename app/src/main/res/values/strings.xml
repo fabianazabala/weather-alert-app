@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">climate_dissertation_app</string>
+    <string name="app_name">Weather Alert</string>
     <string name="pending_location">Finding your weather data…</string>
     <string name="current_weather">Current Weather</string>
     <string name="clothes_selection">Clothes Selection</string>
@@ -11,6 +11,6 @@
     <string name="cloth_piece">a piece of fabric my dude</string>
     <string name="title_recommended_clothes">Recommended Clothes</string>
     <string name="title_current_weather">Current Weather</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="recommended_weather_icon">recommended weather icon</string>
 </resources>
