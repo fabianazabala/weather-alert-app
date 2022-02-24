@@ -132,7 +132,7 @@ class RecommendationService @Inject constructor(
         weather: WeatherDetails,
         recommendedClothes: List<ClothItem>
     ): String {
-        return "Today is a ${weatherSummaryString(weather)} day! For today it's recommended you wear: " +
+        return "It's a ${weatherSummaryString(weather)} ${dayOrNight(weather)}! For today it's recommended you wear: " +
                 recommendedClothes.joinToString { it.name }
     }
 
@@ -153,15 +153,24 @@ class RecommendationService @Inject constructor(
             .append("Currently there's ${weatherDetails.weatherData.temperature.roundToInt()} ${weatherDetails.weatherData.temperatureSymbol} ")
             .append("in ${weatherDetails.cityName} but it feels like ${weatherDetails.weatherData.feelsLike.roundToInt()} ${weatherDetails.weatherData.temperatureSymbol}")
             .append(System.lineSeparator())
-            .append("Today we're expecting a ${weatherSummaryString(weatherDetails)} day!")
+            .append(
+                "Today we're expecting a ${weatherSummaryString(weatherDetails)} ${
+                    dayOrNight(
+                        weatherDetails
+                    )
+                }!"
+            )
             .toString()
 
     private fun recommendGreetingsText(weatherDetails: WeatherDetails): String =
         StringBuilder()
             .append("Good ")
-            .append(if (isNight(weatherDetails)) "Night" else "Day")
+            .append(dayOrNight(weatherDetails))
             .append(", ")
             .toString()
+
+    private fun dayOrNight(weatherDetails: WeatherDetails) =
+        if (isNight(weatherDetails)) "night" else "day"
 
     private fun weatherSummaryString(weatherDetails: WeatherDetails): String {
         return when {

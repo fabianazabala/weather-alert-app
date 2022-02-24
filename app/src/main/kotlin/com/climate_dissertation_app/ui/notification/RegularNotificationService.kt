@@ -13,7 +13,11 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.climate_dissertation_app.service.CurrentRecommendation
 import com.climate_dissertation_app.service.RecommendationService
+import com.climate_dissertation_app.service.Settings
+import com.climate_dissertation_app.service.SettingsService
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.Duration
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 
@@ -24,6 +28,9 @@ class RegularNotificationService @Inject constructor() : JobService() {
 
     @Inject
     lateinit var recommendationService: RecommendationService
+
+    @Inject
+    lateinit var settingsService: SettingsService
 
     @SuppressLint("MissingPermission")
     override fun onCreate() {
@@ -36,7 +43,7 @@ class RegularNotificationService @Inject constructor() : JobService() {
             sendNotification(it)
         }
 
-        scheduleJob(applicationContext)
+        scheduleJob(applicationContext, settingsService.fetchSettings(applicationContext))
         return true
     }
 
@@ -46,15 +53,29 @@ class RegularNotificationService @Inject constructor() : JobService() {
 
 
     companion object {
-        fun scheduleJob(context: Context) {
-            val serviceComponent = ComponentName(context, RegularNotificationService::class.java)
-            val builder = JobInfo.Builder(0, serviceComponent)
-            builder.setMinimumLatency(1000 * 60 * 5)
 
-            builder.setOverrideDeadline(1000 * 60 * 10)
+        const val jobId = 0
+
+        fun scheduleJob(context: Context, settings: Settings?) {
+            val serviceComponent = ComponentName(context, RegularNotificationService::class.java)
+            val builder = JobInfo.Builder(jobId, serviceComponent)
+            val minimumLatency = settings
+                ?.let { Duration.of(settings.amount.toLong(), settings.unit).toMillis() }
+                ?: Duration.of(5, ChronoUnit.MINUTES).toMillis()
+
+            builder.setMinimumLatency(minimumLatency)
+
+            builder.setOverrideDeadline(minimumLatency * 2)
 
             val jobScheduler = context.getSystemService(JobScheduler::class.java)
             jobScheduler.schedule(builder.build())
+        }
+
+        fun rescheduleJob(context: Context, settings: Settings?) {
+            val jobScheduler = context.getSystemService(JobScheduler::class.java)
+            jobScheduler.cancel(jobId)
+
+            scheduleJob(context, settings)
         }
     }
 

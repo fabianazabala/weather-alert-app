@@ -13,4 +13,11 @@
     <string name="title_current_weather">Current Weather</string>
     <string name="loading">Loading…</string>
     <string name="recommended_weather_icon">recommended weather icon</string>
+    <string name="notification_frequency">Notification frequency</string>
+    <string name="save">Save</string>
+    <string-array name="timeframe_values">
+        <item>Seconds</item>
+        <item>Minutes</item>
+        <item>Hours</item>
+    </string-array>
 </resources>

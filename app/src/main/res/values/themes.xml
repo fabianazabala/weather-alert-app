@@ -1,5 +1,8 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.Climate_dissertation_app" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Climate_dissertation_app" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
+
+    <style name="Theme.Climate_dissertation_app.Button" parent="ThemeOverlay.Material3.Button">
+        <item name="colorPrimary">@android:color/black</item>
     </style>
 </resources>

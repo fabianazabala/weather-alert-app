@@ -14,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.climate_dissertation_app.R
 import com.climate_dissertation_app.service.RecommendationService
+import com.climate_dissertation_app.service.SettingsService
 import com.climate_dissertation_app.ui.notification.RegularNotificationService
+import com.climate_dissertation_app.ui.settings.SettingsFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.navigation.NavigationView
@@ -34,6 +36,9 @@ class MainActivity : AppCompatActivity(),
     lateinit var recommendationService: RecommendationService
 
     @Inject
+    lateinit var settingsService: SettingsService
+
+    @Inject
     lateinit var clock: Clock
 
     private lateinit var locationProvider: FusedLocationProviderClient
@@ -45,14 +50,17 @@ class MainActivity : AppCompatActivity(),
         locationProvider = LocationServices.getFusedLocationProviderClient(this)
         requestLocationPermission()
         setContentView(R.layout.activity_main)
-
+        nav_view.setNavigationItemSelectedListener(this)
         configureNavigationDrawer()
         currentRecommendationFragment()
         configureRegularNotifications()
     }
 
     private fun configureRegularNotifications() {
-        RegularNotificationService.scheduleJob(applicationContext)
+        RegularNotificationService.scheduleJob(
+            applicationContext,
+            settingsService.fetchSettings(applicationContext)
+        )
     }
 
     private fun configureNavigationDrawer() {
@@ -132,9 +140,15 @@ class MainActivity : AppCompatActivity(),
         else -> {
             throw NotImplementedError("Yo dude implement me pls")
         }
-    }
+    }.also { drawer_layout.close() }
 
     private fun settingsFragment(): Boolean {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(
+            fragment_placeholder.id,
+            SettingsFragment()
+        )
+        transaction.commit()
         return true
     }
 
